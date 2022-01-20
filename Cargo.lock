@@ -1200,7 +1200,7 @@ dependencies = [
 
 [[package]]
 name = "you-can"
-version = "0.0.2021"
+version = "0.0.2022-dev.0"
 dependencies = [
  "unbounded",
  "you-can-build-macros",
@@ -1208,7 +1208,7 @@ dependencies = [
 
 [[package]]
 name = "you-can-build-macros"
-version = "0.0.2021"
+version = "0.0.2022-dev.0"
 dependencies = [
  "bat",
  "crossterm",
