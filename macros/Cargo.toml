@@ -1,9 +1,11 @@
 [package]
-name = "you-can-build-macros"
 description = "ಠ_ಠ"
-license = "MIT OR Apache-2.0"
-version = "0.0.2021"
 edition = "2021"
+homepage = "https://docs.rs/you-can"
+license = "MIT OR Apache-2.0"
+name = "you-can-build-macros"
+repository = "https://github.com/jeremyBanks/you-can"
+version = "0.0.2021"
 
 [lib]
 proc-macro = true

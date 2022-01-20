@@ -1,19 +1,12 @@
-//! **Unsound and unsafe**! For edutainment purposes only.
-
-#![feature(associated_type_defaults)]
-
 use {
     crossterm::style::Stylize,
     proc_macro::{TokenStream, TokenTree},
     quote::ToTokens,
-    std::{
-        any::{Any, TypeId},
-        borrow::Cow,
-        panic::Location,
-    },
+    std::{borrow::Cow, panic::Location},
     syn::parse_macro_input,
 };
 
+#[doc(hidden)]
 #[proc_macro_attribute]
 pub fn turn_off_the_borrow_checker(_attribute: TokenStream, item: TokenStream) -> TokenStream {
     let item: syn::File = parse_macro_input!(item);
@@ -32,17 +25,21 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, item: TokenStream) -
 }
 
 trait WithBorrowCheckerDisabled: Sized {
-    type Output = Self;
+    type Output;
     fn with_borrow_checker_disabled(&self) -> Self::Output;
 }
 
 impl WithBorrowCheckerDisabled for syn::File {
+    type Output = Self;
+
     fn with_borrow_checker_disabled(&self) -> Self::Output {
         self.clone()
     }
 }
 
 impl WithBorrowCheckerDisabled for syn::ItemFn {
+    type Output = Self;
+
     fn with_borrow_checker_disabled(&self) -> Self::Output {
         self.clone()
     }

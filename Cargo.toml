@@ -4,11 +4,15 @@ members = [".", "./macros"]
 [package]
 description = "#[you_can::turn_off_the_borrow_checker]"
 edition = "2021"
+homepage = "https://docs.rs/you-can"
 license = "MIT OR Apache-2.0"
 name = "you-can"
 repository = "https://github.com/jeremyBanks/you-can"
 version = "0.0.2021"
 
-[dependencies]
+[package.metadata.docs.rs]
+cargo-args = ["-Zunstable-options", "-Zrustdoc-scrape-examples=examples"]
+
+[dependencies]  
 unbounded = "0.0.2022"
 you-can-build-macros = { path = "./macros", version = "0.0.2021" }
