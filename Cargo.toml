@@ -1,0 +1,14 @@
+[workspace]
+members = [".", "./macros"]
+
+[package]
+description = "#[you_can::turn_off_the_borrow_checker]"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+name = "you-can"
+repository = "https://github.com/jeremyBanks/you-can"
+version = "0.0.2021"
+
+[dependencies]
+unbounded = "0.0.2022"
+you-can-build-macros = { path = "./macros", version = "0.0.2021" }
