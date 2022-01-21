@@ -94,13 +94,17 @@
 ///     let mut source = Some(1);
 ///     let inner_mut = ::unbounded::reference(&*source.as_ref().unwrap());
 ///     let mutable_alias = ::unbounded::reference(&mut source);
+///
 ///     source = None;
 ///     *mutable_alias = Some(2);
+///
 ///     if let Some(ref mut inner_a) = source {
 ///         let inner_a = ::unbounded::reference(inner_a);
+///
 ///         match source {
 ///             Some(ref mut inner_b) => {
 ///                 let inner_b = ::unbounded::reference(inner_b);
+///
 ///                 *inner_b = inner_mut + 1;
 ///                 *inner_a = inner_mut + 2;
 ///             },
@@ -109,6 +113,7 @@
 ///             },
 ///         }
 ///     }
+///
 ///     println!("{source:?}");
 /// }
 /// ```
