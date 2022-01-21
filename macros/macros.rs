@@ -6,41 +6,93 @@ use {
     syn::parse_macro_input,
 };
 
-#[doc(hidden)]
 #[proc_macro_attribute]
-pub fn turn_off_the_borrow_checker(_attribute: TokenStream, item: TokenStream) -> TokenStream {
-    let item: syn::File = parse_macro_input!(item);
+pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) -> TokenStream {
+    let input: syn::File = parse_macro_input!(input);
 
-    assert_eq!(item.items.len(), 1, "expected exactly one item");
-    let item_fn = match &item.items[0] {
-        syn::Item::Fn(item_fn) => item_fn,
-        _ => panic!("expected a function"),
-    };
+    print("input", &input);
 
-    let item = item_fn.with_borrow_checker_disabled();
+    let output = input.clone().borrow_checker_suppressed();
 
-    print("output", &item);
+    print("output", &output);
 
-    item.into_token_stream().into()
+    output.into_token_stream().into()
 }
 
-trait WithBorrowCheckerDisabled: Sized {
+trait BorrowCheckerSuppressed: Sized {
     type Output;
-    fn with_borrow_checker_disabled(&self) -> Self::Output;
+    fn borrow_checker_suppressed(self) -> Self::Output;
 }
 
-impl WithBorrowCheckerDisabled for syn::File {
+impl BorrowCheckerSuppressed for syn::Item {
     type Output = Self;
 
-    fn with_borrow_checker_disabled(&self) -> Self::Output {
-        self.clone()
+    fn borrow_checker_suppressed(mut self) -> Self::Output {
+        match self {
+            syn::Item::Fn(item_fn) => item_fn.borrow_checker_suppressed().into(),
+            syn::Item::Impl(item_impl) => item_impl.borrow_checker_suppressed().into(),
+            syn::Item::Mod(item_mod) => item_mod.borrow_checker_suppressed().into(),
+            _ => self,
+        }
     }
 }
 
-impl WithBorrowCheckerDisabled for syn::ItemFn {
+impl BorrowCheckerSuppressed for syn::ImplItem {
     type Output = Self;
 
-    fn with_borrow_checker_disabled(&self) -> Self::Output {
+    fn borrow_checker_suppressed(mut self) -> Self::Output {
+        match self {
+            syn::ImplItem::Method(impl_item_method) => impl_item_method.borrow_checker_suppressed().into(),
+            _ => self,
+        }
+    }
+}
+
+impl BorrowCheckerSuppressed for syn::ImplItemMethod {
+    type Output = Self;
+
+    fn borrow_checker_suppressed(mut self) -> Self::Output {
+
+    }
+}
+
+impl BorrowCheckerSuppressed for syn::ItemImpl {
+    type Output = Self;
+
+    fn borrow_checker_suppressed(mut self) -> Self::Output {
+        for item in self.items.iter_mut() {
+            *item = item.borrow_checker_suppressed();
+        }
+        self
+    }
+}
+
+impl BorrowCheckerSuppressed for syn::ItemMod {
+    type Output = Self;
+
+    fn borrow_checker_suppressed(mut self) -> Self::Output {
+        for item in self.content.unwrap_or_default().1.iter_mut() {
+            *item = item.borrow_checker_suppressed();
+        }
+        self
+    }
+}
+
+impl BorrowCheckerSuppressed for syn::File {
+    type Output = Self;
+
+    fn borrow_checker_suppressed(mut self) -> Self::Output {
+        for item in self.items.iter_mut() {
+            *item = item.borrow_checker_suppressed();
+        }
+        self
+    }
+}
+
+impl BorrowCheckerSuppressed for syn::ItemFn {
+    type Output = Self;
+
+    fn borrow_checker_suppressed(mut self) -> Self::Output {
         self.clone()
     }
 }
