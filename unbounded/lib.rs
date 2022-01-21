@@ -19,9 +19,9 @@
 ///
 /// # Safety
 ///
-/// This is **unsound and unsafe**, even though it is marked as a safe function!
-/// Invoking this functions risks incurring the wrath of the optimizer. Rust
-/// references are not pointers. For edutainment purposes only.
+/// This is **unsound and unsafe**. Invoking this functions risks incurring the
+/// wrath of the optimizer. Rust references are not pointers. For edutainment
+/// purposes only.
 ///
 /// # Examples
 ///

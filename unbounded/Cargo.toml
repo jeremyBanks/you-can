@@ -5,7 +5,7 @@ homepage = "https://docs.rs/you-can/latest/you_can/attr.turn_off_the_borrow_chec
 license = "MIT OR Apache-2.0"
 name = "unbounded"
 repository = "https://github.com/jeremyBanks/you-can"
-version = "0.0.3"
+version = "0.0.4"
 
 [lib]
 path = "./lib.rs"
