@@ -9,7 +9,7 @@ homepage = "https://docs.rs/you-can/latest/you_can/attr.turn_off_the_borrow_chec
 license = "MIT OR Apache-2.0"
 name = "you-can"
 repository = "https://github.com/jeremyBanks/you-can"
-version = "0.0.5-dev"
+version = "0.0.5"
 
 [dependencies]
 unbounded = { path = "./unbounded", version = "0.0.5-dev" }
@@ -23,7 +23,6 @@ dev-version = true
 dev-version-ext = "dev"
 post-release-commit-message = "v{{next_version}}"
 pre-release-commit-message = "v{{version}}"
-pre-release-hook = ["scripts/pre-release"]
 shared-version = true
 tag-message = "https://crates.io/crates/{{crate_name}}/{{version}}"
 tag-name = "{{version}}"
