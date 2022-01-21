@@ -57,8 +57,7 @@
 /// This approached is limited. It can't suppress errors resulting from the code
 /// illegally composing lifetimes created elsewhere, or references created
 /// implicitly. As a workaround, prefixing `&*` can sometimes be used to force
-/// an explicit (unbindable) reference where one is needed, such as as in the
-/// example below.
+/// an explicit reference where one is needed, such as as in the example below.
 ///
 /// ### Example
 ///
