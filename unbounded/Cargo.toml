@@ -1,11 +1,15 @@
 [package]
+authors = ["Jeremy Banks <_@jeremy.ca>"]
 description = "ಠ_ಠ"
 edition = "2021"
 homepage = "https://docs.rs/you-can/latest/you_can/attr.turn_off_the_borrow_checker.html"
 license = "MIT OR Apache-2.0"
 name = "unbounded"
 repository = "https://github.com/jeremyBanks/you-can"
-version = "0.0.4"
+version = "0.0.5"
 
 [lib]
 path = "./lib.rs"
+
+[package.metadata.release]
+shared-version = true

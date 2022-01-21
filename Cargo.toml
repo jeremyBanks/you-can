@@ -2,14 +2,28 @@
 members = [".", "./macros", "./unbounded"]
 
 [package]
+authors = ["Jeremy Banks <_@jeremy.ca>"]
 description = "#[you_can::turn_off_the_borrow_checker]"
 edition = "2021"
 homepage = "https://docs.rs/you-can/latest/you_can/attr.turn_off_the_borrow_checker.html"
 license = "MIT OR Apache-2.0"
 name = "you-can"
 repository = "https://github.com/jeremyBanks/you-can"
-version = "0.0.4"
+version = "0.0.5"
 
 [dependencies]
-unbounded = { path = "./unbounded", version = "0.0.4" }
-you-can-build-macros = { path = "./macros", version = "0.0.4" }
+unbounded = { path = "./unbounded", version = "0.0.5" }
+you-can-build-macros = { path = "./macros", version = "0.0.5" }
+
+[package.metadata.release]
+allow-branch = ["trunk", "main", "master"]
+consolidate-commits = true
+consolidated-pushes = true
+dev-version = true
+dev-version-ext = "dev"
+post-release-commit-message = "v{{next_version}}"
+pre-release-commit-message = "v{{version}}"
+pre-release-hook = ["scripts/pre-release"]
+shared-version = true
+tag-message = "https://crates.io/crates/{{crate_name}}/{{version}}"
+tag-name = "{{version}}"
