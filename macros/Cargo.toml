@@ -17,4 +17,4 @@ crossterm = "0.22.1"
 eyre = "0.6.6"
 prettyplease = "0.1.1"
 quote = "1.0.14"
-syn = "1.0.85"
+syn = { version = "1.0.85", features = ["default", "full", "visit", "visit-mut", "extra-traits", "fold"] }

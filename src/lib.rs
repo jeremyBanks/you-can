@@ -36,9 +36,9 @@
 /// ## Explanation
 ///
 /// The macro looks for references created in the code by use of the `&` or
-/// `&mut` operators, or from bindings with `ref` and `ref mut`, and wraps
-/// them with [`::unbounded::reference()`] to [unbind their lifetimes][UBL],
-/// causing the borrow checker to effectively ignore them.
+/// `&mut` operators and wraps them with [`::unbounded::reference()`] to
+/// [unbind their lifetimes][UBL], causing the borrow checker to effectively
+/// ignore them.
 ///
 /// ```
 /// fn main() {
@@ -52,6 +52,10 @@
 ///
 /// This approached is limited. It can't suppress errors resulting from the code
 /// illegally composing lifetimes created elsewhere.
+///
+/// ## Future Work
+///
+/// - Unbind references created with with `ref` and `ref mut`.
 ///
 /// [OFF]: https://steveklabnik.com/writing/you-can-t-turn-off-the-borrow-checker-in-rust
 /// [REF]: https://doc.rust-lang.org/std/primitive.reference.html

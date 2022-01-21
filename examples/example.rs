@@ -5,9 +5,16 @@
     associated_type_defaults
 )]
 
+
 #[you_can::turn_off_the_borrow_checker]
 fn main() {
-    let mut a = 1;
-    a += 1;
-    println!("{a}");
+    let mut source = Some(1);
+    let mutable_alias = &mut source;
+    source = None;
+    *mutable_alias = Some(2);
+    println!("{source:?}");
+    if let Some(ref mut source) = source {
+        *source = 3;
+    }
+    println!("{source:?}");
 }
