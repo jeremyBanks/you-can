@@ -15,7 +15,7 @@ version = "0.0.6-dev"
 unbounded = { path = "./unbounded", version = "^0.0.6-dev"}
 you-can-build-macros = { path = "./macros", version = "^0.0.6-dev"}
 
-[package.metadata.release]
+[workspace.metadata.release]
 allow-branch = ["trunk", "main", "master"]
 consolidate-commits = true
 consolidate-pushes = true

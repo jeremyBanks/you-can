@@ -16,15 +16,3 @@ path = "./lib.rs"
 crossterm = "0.22.1"
 quote = "1.0.14"
 syn = { version = "1.0.85", features = ["default", "full", "visit", "visit-mut", "extra-traits", "fold"] }
-
-[package.metadata.release]
-allow-branch = ["trunk", "main", "master"]
-consolidate-commits = true
-consolidate-pushes = true
-dev-version = true
-dev-version-ext = "dev"
-post-release-commit-message = "v{{next_version}}"
-pre-release-commit-message = "v{{version}}"
-shared-version = true
-tag-message = "https://crates.io/crates/{{crate_name}}/{{version}}"
-tag-name = "{{version}}"
