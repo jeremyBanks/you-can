@@ -1,46 +1,81 @@
 use {
-    proc_macro::{TokenStream},
+    proc_macro::TokenStream,
     quote::ToTokens,
-    syn::{parse_macro_input, visit_mut::VisitMut},
+    syn::{fold::Fold, parse_macro_input, visit::Visit},
 };
 
 mod print;
-use print::print;
-use syn::{parse_quote, parse_quote_spanned};
+use {print::print, syn::parse_quote};
 
 #[proc_macro_attribute]
 pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) -> TokenStream {
-    let mut tree: syn::File = parse_macro_input!(input);
+    let input: syn::File = parse_macro_input!(input);
 
-    print("input", &tree);
+    let output = BorrowCheckerSuppressor.fold_file(input);
 
-    BorrowCheckerSuppressor.visit_file_mut(&mut tree);
+    print(&output);
 
-    print("output", &tree);
-
-    tree.into_token_stream().into()
+    output.into_token_stream().into()
 }
-
-struct BorrowCheckerSuppressor;
 
 /// Replaces all references (&T or &mut T) with unbounded references by wrapping
 /// them in calls to unbounded::reference().
-impl VisitMut for BorrowCheckerSuppressor {
-    fn visit_expr_reference_mut(&mut self, node: &mut syn::ExprReference) {
-        print("ExprReference", &node);
-        let s: syn::Expr = parse_quote!(#node);
-        *node = s;
+#[derive(Debug, Default)]
+struct BorrowCheckerSuppressor;
 
-        // syn::visit_mut::visit_expr_reference_mut(self, node);
+impl Fold for BorrowCheckerSuppressor {
+    fn fold_expr(&mut self, node: syn::Expr) -> syn::Expr {
+        match node {
+            syn::Expr::Reference(node) => {
+                let node = syn::fold::fold_expr_reference(self, node);
+                syn::Expr::Paren(parse_quote! {
+                  (::unbounded::reference(#node))
+                })
+            },
+            _ => syn::fold::fold_expr(self, node),
+        }
     }
 
-    fn visit_pat_reference_mut(&mut self, node: &mut syn::PatReference) {
-        print("PatReference", &node);
-        syn::visit_mut::visit_pat_reference_mut(self, node);
+    fn fold_expr_if(&mut self, mut node: syn::ExprIf) -> syn::ExprIf {
+        if matches!(*node.cond, syn::Expr::Let(_)) {
+            let mut ref_collector = RefCollector::default();
+            ref_collector.visit_expr(&node.cond);
+            let refs = ref_collector.refs;
+            let then_stmts = node.then_branch.stmts.clone();
+            node.then_branch = parse_quote! {
+                {
+                    #(let #refs = ::unbounded::reference(#refs);)*
+                    #(#then_stmts)*
+                }
+            };
+        }
+        syn::fold::fold_expr_if(self, node)
     }
 
-    fn visit_type_reference_mut(&mut self, node: &mut syn::TypeReference) {
-        print("TypeReference", &node);
-        syn::visit_mut::visit_type_reference_mut(self, node);
+    fn fold_arm(&mut self, mut node: syn::Arm) -> syn::Arm {
+        let mut ref_collector = RefCollector::default();
+        ref_collector.visit_pat(&node.pat);
+        let refs = ref_collector.refs;
+        let body = node.body.clone();
+        node.body = parse_quote! {
+            {
+                #(let #refs = ::unbounded::reference(#refs);)*
+                #body
+            }
+        };
+        syn::fold::fold_arm(self, node)
+    }
+}
+
+#[derive(Debug, Default)]
+struct RefCollector {
+    refs: Vec<syn::Ident>,
+}
+
+impl<'ast> Visit<'ast> for RefCollector {
+    fn visit_pat_ident(&mut self, node: &'ast syn::PatIdent) {
+        if node.by_ref.is_some() {
+            self.refs.push(node.ident.clone());
+        }
     }
 }

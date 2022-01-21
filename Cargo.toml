@@ -10,9 +10,6 @@ name = "you-can"
 repository = "https://github.com/jeremyBanks/you-can"
 version = "0.0.1"
 
-[package.metadata.docs.rs]
-cargo-args = ["-Zunstable-options", "-Zrustdoc-scrape-examples=examples"]
-
 [dependencies]
 unbounded = "0.0.2022"
 you-can-build-macros = { path = "./macros", version = "0.0.1" }

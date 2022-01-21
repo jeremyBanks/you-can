@@ -9,6 +9,8 @@
 /// purposes and never in production code**, this macro that will suppress many
 /// (though not all) borrow checker errors in the code it's applied to.
 ///
+/// ### Example
+///
 /// ```compile_fail
 /// fn main() {
 ///    let mut source = 1;
@@ -36,9 +38,11 @@
 /// ## Explanation
 ///
 /// The macro looks for references created in the code by use of the `&` or
-/// `&mut` operators and wraps them with [`::unbounded::reference()`] to
-/// [unbind their lifetimes][UBL], causing the borrow checker to effectively
-/// ignore them.
+/// `&mut` operators or the `ref` and `ref mut` bindings, and wraps them with
+/// [`::unbounded::reference()`] to [unbind their lifetimes][UBL], causing the
+/// borrow checker to effectively ignore them.
+///
+/// #### Expanded
 ///
 /// ```
 /// fn main() {
@@ -51,11 +55,70 @@
 /// ```
 ///
 /// This approached is limited. It can't suppress errors resulting from the code
-/// illegally composing lifetimes created elsewhere.
+/// illegally composing lifetimes created elsewhere, or references created
+/// implicitly. As a workaround, prefixing `&*` can sometimes be used to force
+/// an explicit (unbindable) reference where one is needed, such as as in this
+/// larger example:
 ///
-/// ## Future Work
+/// ### Example
 ///
-/// - Unbind references created with with `ref` and `ref mut`.
+/// ```
+/// #[you_can::turn_off_the_borrow_checker]
+/// fn main() {
+///     let mut source = Some(1);
+///     let inner_mut = &*source.as_ref().unwrap();
+///     let mutable_alias = &mut source;
+///
+///     source = None;
+///     *mutable_alias = Some(2);
+///
+///     if let Some(ref mut inner_a) = source {
+///         match source {
+///             Some(2) => {
+///                 println!("two");
+///             },
+///             Some(ref mut inner_b) => {
+///                 *inner_b = inner_mut + 1;
+///                 *inner_a = inner_mut + 2;
+///             },
+///             None => {
+///                 println!("none");
+///             },
+///         }
+///     }
+///
+///     println!("{source:?}");
+/// }
+/// ```
+///
+/// #### Expanded
+///
+/// ```
+/// fn main() {
+///     let mut source = Some(1);
+///     let inner_mut = ::unbounded::reference(&*source.as_ref().unwrap());
+///     let mutable_alias = ::unbounded::reference(&mut source);
+///     source = None;
+///     *mutable_alias = Some(2);
+///     if let Some(ref mut inner_a) = source {
+///         let inner_a = ::unbounded::reference(inner_a);
+///         match source {
+///             Some(2) => {
+///                 println!("two");
+///             },
+///             Some(ref mut inner_b) => {
+///                 let inner_b = ::unbounded::reference(inner_b);
+///                 *inner_b = inner_mut + 1;
+///                 *inner_a = inner_mut + 2;
+///             },
+///             None => {
+///                 println!("none");
+///             },
+///         }
+///     }
+///     println!("{source:?}");
+/// }
+/// ```
 ///
 /// [OFF]: https://steveklabnik.com/writing/you-can-t-turn-off-the-borrow-checker-in-rust
 /// [REF]: https://doc.rust-lang.org/std/primitive.reference.html
