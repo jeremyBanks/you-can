@@ -210,7 +210,7 @@ dependencies = [
 
 [[package]]
 name = "unbounded"
-version = "0.0.2"
+version = "0.0.3"
 
 [[package]]
 name = "unicode-xid"
@@ -242,7 +242,7 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "you-can"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
  "unbounded",
  "you-can-build-macros",
@@ -250,7 +250,7 @@ dependencies = [
 
 [[package]]
 name = "you-can-build-macros"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
  "crossterm",
  "quote",
