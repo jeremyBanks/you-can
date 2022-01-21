@@ -1,15 +1,15 @@
 [workspace]
-members = [".", "./macros"]
+members = [".", "./macros", "./unbounded"]
 
 [package]
 description = "#[you_can::turn_off_the_borrow_checker]"
 edition = "2021"
-homepage = "https://docs.rs/you-can"
+homepage = "https://docs.rs/you-can/latest/you_can/attr.turn_off_the_borrow_checker.html"
 license = "MIT OR Apache-2.0"
 name = "you-can"
 repository = "https://github.com/jeremyBanks/you-can"
-version = "0.0.1"
+version = "0.0.2"
 
 [dependencies]
-unbounded = "0.0.2022"
-you-can-build-macros = { path = "./macros", version = "0.0.1" }
+unbounded = { path = "./unbounded", version = "0.0.2" }
+you-can-build-macros = { path = "./macros", version = "0.0.2" }

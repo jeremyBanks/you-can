@@ -1,11 +1,9 @@
 use {
+    crossterm::style::Stylize,
     proc_macro::TokenStream,
     quote::ToTokens,
-    syn::{fold::Fold, parse_macro_input, visit::Visit},
+    syn::{fold::Fold, parse_macro_input, parse_quote, visit::Visit},
 };
-
-mod print;
-use {print::print, syn::parse_quote};
 
 #[proc_macro_attribute]
 pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) -> TokenStream {
@@ -13,7 +11,24 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
 
     let output = BorrowCheckerSuppressor.fold_file(input);
 
-    print(&output);
+    static DANGER: std::sync::Once = std::sync::Once::new();
+    DANGER.call_once(|| {
+        println!();
+        println!(
+            "{}  This project is using the the {}",
+            " DANGER ".white().on_red().bold().slow_blink(),
+            "#[you_can::turn_off_the_borrow_checker]".bold()
+        );
+        println!(
+            "{}  macro, which is inherently unsafe, unsound, and unstable. This is not",
+            " DANGER ".red().on_black().bold().slow_blink()
+        );
+        println!(
+            "{}  suitable for any purpose beyond curious educational experimentation.",
+            " DANGER ".black().on_white().bold().slow_blink()
+        );
+        println!();
+    });
 
     output.into_token_stream().into()
 }
@@ -28,8 +43,11 @@ impl Fold for BorrowCheckerSuppressor {
         match node {
             syn::Expr::Reference(node) => {
                 let node = syn::fold::fold_expr_reference(self, node);
-                syn::Expr::Paren(parse_quote! {
-                  (::unbounded::reference(#node))
+                syn::Expr::Block(parse_quote! {
+                    {
+                        let r#ref = #node;
+                        unsafe { ::unbounded::reference(r#ref) }
+                    }
                 })
             },
             _ => syn::fold::fold_expr(self, node),
@@ -44,7 +62,7 @@ impl Fold for BorrowCheckerSuppressor {
             let then_stmts = node.then_branch.stmts.clone();
             node.then_branch = parse_quote! {
                 {
-                    #(let #refs = ::unbounded::reference(#refs);)*
+                    #(let #refs = unsafe { ::unbounded::reference(#refs) };)*
                     #(#then_stmts)*
                 }
             };
@@ -59,7 +77,7 @@ impl Fold for BorrowCheckerSuppressor {
         let body = node.body.clone();
         node.body = parse_quote! {
             {
-                #(let #refs = ::unbounded::reference(#refs);)*
+                #(let #refs = unsafe { ::unbounded::reference(#refs) };)*
                 #body
             }
         };

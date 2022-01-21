@@ -3,11 +3,12 @@
 #![warn(unused_extern_crates)]
 #![deny(unsafe_op_in_unsafe_fn)]
 /// [You can't "turn off the borrow checker" in Rust][OFF], and you shouldn't
-/// want to. Rust references aren't pointers, and the compiler is free to
-/// decimate code that tries to use references as though they are. However, if
-/// you would like to pretend the borrow checker doesn't exist **for educational
-/// purposes and never in production code**, this macro that will suppress many
-/// (though not all) borrow checker errors in the code it's applied to.
+/// want to. [Rust's references][REF] aren't pointers, and the compiler is free
+/// to decimate code that tries to use references as though they are. However,
+/// if you would like to pretend the borrow checker doesn't exist **for
+/// educational purposes and never in production code**, this macro that will
+/// suppress many (though not all) borrow checker errors in the code it's
+/// applied to.
 ///
 /// ### Example
 ///
@@ -47,7 +48,7 @@
 /// ```
 /// fn main() {
 ///     let mut source = 1;
-///     let mutable_alias = ::unbounded::reference(&mut source);
+///     let mutable_alias = unsafe { ::unbounded::reference(&mut source) };
 ///     source = 2;
 ///     *mutable_alias = 3;
 ///     println!("{source}");
@@ -92,18 +93,18 @@
 /// ```
 /// fn main() {
 ///     let mut source = Some(1);
-///     let inner_mut = ::unbounded::reference(&*source.as_ref().unwrap());
-///     let mutable_alias = ::unbounded::reference(&mut source);
+///     let inner_mut = unsafe { ::unbounded::reference(&*source.as_ref().unwrap()) };
+///     let mutable_alias = unsafe { ::unbounded::reference(&mut source) };
 ///
 ///     source = None;
 ///     *mutable_alias = Some(2);
 ///
 ///     if let Some(ref mut inner_a) = source {
-///         let inner_a = ::unbounded::reference(inner_a);
+///         let inner_a = unsafe { ::unbounded::reference(inner_a) };
 ///
 ///         match source {
 ///             Some(ref mut inner_b) => {
-///                 let inner_b = ::unbounded::reference(inner_b);
+///                 let inner_b = unsafe { ::unbounded::reference(inner_b) };
 ///
 ///                 *inner_b = inner_mut + 1;
 ///                 *inner_a = inner_mut + 2;
@@ -120,6 +121,5 @@
 ///
 /// [OFF]: https://steveklabnik.com/writing/you-can-t-turn-off-the-borrow-checker-in-rust
 /// [REF]: https://doc.rust-lang.org/std/primitive.reference.html
-/// [NLL]: https://rust-lang.github.io/rfcs/2094-nll.html
 /// [UBL]: https://doc.rust-lang.org/nomicon/unbounded-lifetimes.html
 pub use you_can_build_macros::turn_off_the_borrow_checker;

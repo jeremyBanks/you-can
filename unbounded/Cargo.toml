@@ -3,15 +3,9 @@ description = "ಠ_ಠ"
 edition = "2021"
 homepage = "https://docs.rs/you-can/latest/you_can/attr.turn_off_the_borrow_checker.html"
 license = "MIT OR Apache-2.0"
-name = "you-can-build-macros"
+name = "unbounded"
 repository = "https://github.com/jeremyBanks/you-can"
 version = "0.0.2"
 
 [lib]
-proc-macro = true
 path = "./lib.rs"
-
-[dependencies]
-crossterm = "0.22.1"
-quote = "1.0.14"
-syn = { version = "1.0.85", features = ["default", "full", "visit", "visit-mut", "extra-traits", "fold"] }
