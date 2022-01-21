@@ -9,11 +9,11 @@ homepage = "https://docs.rs/you-can/latest/you_can/attr.turn_off_the_borrow_chec
 license = "MIT OR Apache-2.0"
 name = "you-can"
 repository = "https://github.com/jeremyBanks/you-can"
-version = "0.0.4"
+version = "0.0.5-dev"
 
 [dependencies]
-unbounded = { path = "./unbounded", version = "0.0.4" }
-you-can-build-macros = { path = "./macros", version = "0.0.4" }
+unbounded = { path = "./unbounded", version = "0.0.5-dev" }
+you-can-build-macros = { path = "./macros", version = "0.0.5-dev" }
 
 [package.metadata.release]
 allow-branch = ["trunk", "main", "master"]

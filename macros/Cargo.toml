@@ -6,7 +6,7 @@ homepage = "https://docs.rs/you-can/latest/you_can/attr.turn_off_the_borrow_chec
 license = "MIT OR Apache-2.0"
 name = "you-can-build-macros"
 repository = "https://github.com/jeremyBanks/you-can"
-version = "0.0.4"
+version = "0.0.5-dev"
 
 [lib]
 proc-macro = true
