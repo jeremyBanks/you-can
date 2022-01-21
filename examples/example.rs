@@ -9,9 +9,6 @@ fn main() {
 
     if let Some(ref mut inner_a) = source {
         match source {
-            Some(2) => {
-                println!("two");
-            },
             Some(ref mut inner_b) => {
                 *inner_b = inner_mut + 1;
                 *inner_a = inner_mut + 2;

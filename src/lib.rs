@@ -57,8 +57,8 @@
 /// This approached is limited. It can't suppress errors resulting from the code
 /// illegally composing lifetimes created elsewhere, or references created
 /// implicitly. As a workaround, prefixing `&*` can sometimes be used to force
-/// an explicit (unbindable) reference where one is needed, such as as in this
-/// larger example:
+/// an explicit (unbindable) reference where one is needed, such as as in the
+/// example below.
 ///
 /// ### Example
 ///
@@ -74,9 +74,6 @@
 ///
 ///     if let Some(ref mut inner_a) = source {
 ///         match source {
-///             Some(2) => {
-///                 println!("two");
-///             },
 ///             Some(ref mut inner_b) => {
 ///                 *inner_b = inner_mut + 1;
 ///                 *inner_a = inner_mut + 2;
@@ -103,9 +100,6 @@
 ///     if let Some(ref mut inner_a) = source {
 ///         let inner_a = ::unbounded::reference(inner_a);
 ///         match source {
-///             Some(2) => {
-///                 println!("two");
-///             },
 ///             Some(ref mut inner_b) => {
 ///                 let inner_b = ::unbounded::reference(inner_b);
 ///                 *inner_b = inner_mut + 1;
