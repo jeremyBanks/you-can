@@ -1,5 +1,5 @@
 [workspace]
-members = [".", "./macros", "./unbounded"]
+members = [".", "macros", "unbounded"]
 
 [package]
 authors = ["Jeremy Banks <_@jeremy.ca>"]
