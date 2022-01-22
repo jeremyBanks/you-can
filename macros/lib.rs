@@ -1,10 +1,32 @@
-#![feature(proc_macro_diagnostic, proc_macro_span)]
+#![cfg_attr(rustc_is_unstable, feature(proc_macro_diagnostic, proc_macro_span))]
 
 use {
+    crossterm::style::Stylize,
     proc_macro::{Span, TokenStream},
     quote::ToTokens,
     syn::{fold::Fold, parse_macro_input, parse_quote, spanned::Spanned, visit::Visit},
 };
+
+/// Runs one of two branches depending on whether we're running on an
+/// unstable version of the compiler (nightly, dev) or a stable release
+/// (stable, beta).
+macro_rules! if_unstable {
+    { then { $($then:tt)* } else { $($else:tt)* } } => {
+        if cfg!(rustc_is_unstable) {
+            #[cfg(rustc_is_unstable)] {
+                $($then)*
+            }
+            #[cfg(not(rustc_is_unstable))] {
+                unreachable!()
+            }
+        } else {
+            $($else)*
+            #[cfg(rustc_is_unstable)] {
+                unreachable!()
+            }
+        }
+    }
+}
 
 #[proc_macro_attribute]
 pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) -> TokenStream {
@@ -15,26 +37,53 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
     };
     let output = suppressor.fold_file(input);
 
-    proc_macro::Diagnostic::spanned(
-        vec![Span::call_site().parent().unwrap()],
-        proc_macro::Level::Warning,
-        "This macro suppresses the borrow checker in an unsafe, unsound, and unstable way that \
-         produces undefined behaviour. This is not suitable for any purpose beyond educational \
-         experimentation.\n",
-    )
-    .emit();
+    if_unstable! {
+        then {
+            let diagnostic = proc_macro::Diagnostic::spanned(
+                vec![Span::call_site().parent().unwrap()],
+                proc_macro::Level::Warning,
+                "This macro suppresses the borrow checker in an unsafe, unsound, and unstable way \
+                that produces undefined behaviour. This is not suitable for any purpose beyond \
+                educational experimentation.",
+            );
 
-    if suppressor.suppressed_references.len() > 1 {
-        proc_macro::Diagnostic::spanned(
-            suppressor.suppressed_references,
-            proc_macro::Level::Note,
-            "The borrow checker is suppressed for the these references.",
-        )
-        .emit();
-    }
+            if suppressor.suppressed_references.len() > 1 {
+                let mut diagnostic = diagnostic;
+                for span in suppressor.suppressed_references {
+                    diagnostic = diagnostic.span_warning(
+                        vec![span],
+                        "The borrow checker is suppressed for this reference.",
+                    );
+                }
+                diagnostic.emit();
+            } else {
+                diagnostic.emit();
+            }
+        } else {
+            static DANGER: std::sync::Once = std::sync::Once::new();
+            DANGER.call_once(|| {
+                println!();
+                println!(
+                    "{}  This project is using the the {}",
+                    " DANGER ".white().on_red().bold().slow_blink(),
+                    "#[you_can::turn_off_the_borrow_checker]".bold()
+                );
+                println!(
+                    "{}  macro, which is inherently unsafe, unsound, and unstable. This is not",
+                    " DANGER ".red().on_black().bold().slow_blink()
+                );
+                println!(
+                    "{}  suitable for any purpose beyond curious educational experimentation.",
+                    " DANGER ".black().on_white().bold().slow_blink()
+                );
+                println!();
+            });
+        }
+    };
 
     output.into_token_stream().into()
 }
+
 /// Replaces all references (&T or &mut T) with unbounded references by wrapping
 /// them in calls to unbounded::reference().
 #[derive(Debug, Default)]
