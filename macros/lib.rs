@@ -1,48 +1,47 @@
+#![feature(proc_macro_diagnostic, proc_macro_span)]
+
 use {
-    crossterm::style::Stylize,
-    proc_macro::TokenStream,
+    proc_macro::{Span, TokenStream},
     quote::ToTokens,
-    syn::{fold::Fold, parse_macro_input, parse_quote, visit::Visit},
+    syn::{fold::Fold, parse_macro_input, parse_quote, spanned::Spanned, visit::Visit},
 };
 
 #[proc_macro_attribute]
 pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) -> TokenStream {
     let input: syn::File = parse_macro_input!(input);
 
-    let output = BorrowCheckerSuppressor.fold_file(input);
+    let mut suppressor = BorrowCheckerSuppressor {
+        suppressed_references: vec![Span::call_site().parent().unwrap()],
+    };
+    let output = suppressor.fold_file(input);
 
-    static DANGER: std::sync::Once = std::sync::Once::new();
-    DANGER.call_once(|| {
-        println!();
-        println!(
-            "{}  This project is using the the {}",
-            " DANGER ".white().on_red().bold().slow_blink(),
-            "#[you_can::turn_off_the_borrow_checker]".bold()
-        );
-        println!(
-            "{}  macro, which is inherently unsafe, unsound, and unstable. This is not",
-            " DANGER ".red().on_black().bold().slow_blink()
-        );
-        println!(
-            "{}  suitable for any purpose beyond curious educational experimentation.",
-            " DANGER ".black().on_white().bold().slow_blink()
-        );
-        println!();
-    });
+    if suppressor.suppressed_references.len() > 1 {
+        proc_macro::Diagnostic::spanned(
+            suppressor.suppressed_references,
+            proc_macro::Level::Warning,
+            "\
+                The borrow checker is suppressed for these references. \nThey may be invalid and \
+             may produce dangerous undefined behaviour.\nThis should only be used for educational \
+             purposes, not in serious code.",
+        )
+        .emit();
+    }
 
     output.into_token_stream().into()
 }
-
 /// Replaces all references (&T or &mut T) with unbounded references by wrapping
 /// them in calls to unbounded::reference().
 #[derive(Debug, Default)]
-struct BorrowCheckerSuppressor;
+struct BorrowCheckerSuppressor {
+    suppressed_references: Vec<Span>,
+}
 
 impl Fold for BorrowCheckerSuppressor {
     fn fold_expr(&mut self, node: syn::Expr) -> syn::Expr {
         match node {
             syn::Expr::Reference(node) => {
                 let node = syn::fold::fold_expr_reference(self, node);
+                self.suppressed_references.push(node.span().unwrap());
                 syn::Expr::Block(parse_quote! {
                     {
                         let r#ref = #node;
@@ -59,6 +58,8 @@ impl Fold for BorrowCheckerSuppressor {
             let mut ref_collector = RefCollector::default();
             ref_collector.visit_expr(&node.cond);
             let refs = ref_collector.refs;
+            self.suppressed_references
+                .extend(refs.iter().map(|s| s.span().unwrap()));
             let then_stmts = node.then_branch.stmts.clone();
             node.then_branch = parse_quote! {
                 {
@@ -74,6 +75,8 @@ impl Fold for BorrowCheckerSuppressor {
         let mut ref_collector = RefCollector::default();
         ref_collector.visit_pat(&node.pat);
         let refs = ref_collector.refs;
+        self.suppressed_references
+            .extend(refs.iter().map(|s| s.span().unwrap()));
         let body = node.body.clone();
         node.body = parse_quote! {
             {
