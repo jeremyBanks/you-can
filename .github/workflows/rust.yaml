@@ -6,16 +6,13 @@ jobs:
       matrix:
         rust_toolchain: ["stable", "nightly"]
         include:
-        - n: 1
-          rust_toolchain: stable
-        - n: 2
-          rust_toolchain: stable
+        - rust_toolchain: stable
+        - rust_toolchain: beta
           rust_bootstrap: RUSTC_BOOTSTRAP=1
-        - n: 3
-          rust_toolchain: nightly
+        - rust_toolchain: nightly
       fail-fast: false
     runs-on: ubuntu-latest
-    name: "${{ matrix.rust_toolchain }} ${{ matrix.rust_bootstrap }}"
+    name: "${{ matrix.rust_bootstrap }} ${{ matrix.rust_toolchain }}"
     steps:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
