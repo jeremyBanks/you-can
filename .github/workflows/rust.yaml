@@ -1,0 +1,20 @@
+on: [push, workflow_dispatch, pull_request]
+jobs:
+  rust:
+    strategy:
+      matrix:
+        rust_toolchain: ["stable", "nightly"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+            toolchain: ${{ matrix.rust_toolchain }}
+            components: clippy
+            override: true
+      - uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --all
+      - run: cargo test --all --examples
+      - run: cargo doc --all --examples

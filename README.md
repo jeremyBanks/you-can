@@ -123,9 +123,9 @@ fn main() {
 
 Here are some discussions about why this is an awful idea:
 
-- https://rust.reddit.com/s9az4y
-- https://internals.rust-lang.org/t/16001
-- https://news.ycombinator.com/item?id=30031323
+- <https://rust.reddit.com/s9az4y>
+- <https://internals.rust-lang.org/t/16001>
+- <https://news.ycombinator.com/item?id=30031323>
 
 [OFF]: https://steveklabnik.com/writing/you-can-t-turn-off-the-borrow-checker-in-rust
 [REF]: https://doc.rust-lang.org/std/primitive.reference.html
