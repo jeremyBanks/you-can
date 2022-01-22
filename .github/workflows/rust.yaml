@@ -1,15 +1,24 @@
 on: [push, workflow_dispatch, pull_request]
+name: rust
 jobs:
   rust:
     strategy:
       matrix:
         rust_toolchain: ["stable", "nightly"]
+        include:
+        - rust_toolchain: stable
+          rust_bootstrap:
+        - rust_toolchain: stable
+          rust_bootstrap: RUSTC_BOOTSTRAP=1
+        - rust_toolchain: nightly
+          rust_bootstrap:
       fail-fast: false
     runs-on: ubuntu-latest
+    name: "${{ matrix.rust_toolchain }} ${{ matrix.rust_bootstrap }}"
     steps:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
             toolchain: ${{ matrix.rust_toolchain }}
-      - run: cargo +${{ matrix.rust_toolchain }} test --all --examples
-      - run: cargo +${{ matrix.rust_toolchain }} doc --all
+      - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} test --all --examples
+      - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} doc --all
