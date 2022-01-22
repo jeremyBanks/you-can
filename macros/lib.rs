@@ -64,8 +64,7 @@ impl Fold for BorrowCheckerSuppressor {
             let mut ref_collector = RefCollector::default();
             ref_collector.visit_expr(&node.cond);
             let refs = ref_collector.refs;
-            self.suppressed_references
-                .extend(refs.iter().map(|s| s.span().unwrap()));
+            self.suppressed_references.extend(ref_collector.spans);
             let then_stmts = node.then_branch.stmts.clone();
             node.then_branch = parse_quote! {
                 {
@@ -81,8 +80,7 @@ impl Fold for BorrowCheckerSuppressor {
         let mut ref_collector = RefCollector::default();
         ref_collector.visit_pat(&node.pat);
         let refs = ref_collector.refs;
-        self.suppressed_references
-            .extend(refs.iter().map(|s| s.span().unwrap()));
+        self.suppressed_references.extend(ref_collector.spans);
         let body = node.body.clone();
         node.body = parse_quote! {
             {
@@ -97,12 +95,14 @@ impl Fold for BorrowCheckerSuppressor {
 #[derive(Debug, Default)]
 struct RefCollector {
     refs: Vec<syn::Ident>,
+    spans: Vec<Span>,
 }
 
 impl<'ast> Visit<'ast> for RefCollector {
     fn visit_pat_ident(&mut self, node: &'ast syn::PatIdent) {
         if node.by_ref.is_some() {
             self.refs.push(node.ident.clone());
+            self.spans.push(node.span().unwrap());
         }
     }
 }
