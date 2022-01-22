@@ -22,4 +22,4 @@ jobs:
       - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} test --doc
       - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} doc --all
       - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} test --examples
-        if: ${{ matrix.rust_toolchain }} == 'nightly'
+        if: matrix.rust_toolchain == 'nightly'
