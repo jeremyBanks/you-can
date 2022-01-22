@@ -18,8 +18,8 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
             toolchain: ${{ matrix.rust_toolchain }}
-      - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} test --all
+      - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} build --all
+      - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} test --doc
       - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} doc --all
       - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} test --examples
         if: ${{ matrix.rust_toolchain }} == 'nightly'
-
