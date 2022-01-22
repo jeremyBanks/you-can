@@ -15,21 +15,22 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
     };
     let output = suppressor.fold_file(input);
 
-    let diagnostic = proc_macro::Diagnostic::spanned(
+    proc_macro::Diagnostic::spanned(
         vec![Span::call_site().parent().unwrap()],
         proc_macro::Level::Warning,
         "This macro suppresses the borrow checker in an unsafe, unsound, and unstable way that \
          produces undefined behaviour. This is not suitable for any purpose beyond educational \
          experimentation.\n",
-    );
+    )
+    .emit();
 
     if suppressor.suppressed_references.len() > 1 {
-        diagnostic
-            .span_warning(
-                suppressor.suppressed_references,
-                "The borrow checker is suppressed for the these references.",
-            )
-            .emit();
+        proc_macro::Diagnostic::spanned(
+            suppressor.suppressed_references,
+            proc_macro::Level::Note,
+            "The borrow checker is suppressed for the these references.",
+        )
+        .emit();
     }
 
     output.into_token_stream().into()
