@@ -5,19 +5,27 @@ would like to pretend the borrow checker doesn't exist **for educational
 purposes and never in production code**, this macro that will suppress many
 (though not all) borrow checker errors in the code it's applied to.
 
+This shouldn't break any otherwise-valid code, but it will allow unsound and
+unsafe nonsense that will fail unpredictably and dangerously. This **is not safe
+to use**.
+
 ### Example
+
+#### Without Macro
 
 ```compile_fail
 fn main() {
    let mut source = 1;
    let mutable_alias = &mut source;
-   source = 2; // error: cannot assign to `source` because it is borrowed
+   source = 2;  // error: cannot assign to `source` because it is borrowed
    *mutable_alias = 3;
    println!("{source}");
 }
 ```
 
-```
+#### With Macro
+
+```rust
 #[you_can::turn_off_the_borrow_checker]
 fn main() {
     let mut source = 1;
@@ -28,9 +36,6 @@ fn main() {
 }
 ```
 
-This shouldn't break any otherwise-valid code, but it will allow unsound and
-unsafe nonsense.
-
 ## Explanation
 
 The macro looks for references created in the code by use of the `&` or `&mut`
@@ -40,7 +45,7 @@ the borrow checker to effectively ignore them.
 
 #### Expanded
 
-```
+```rust
 fn main() {
     let mut source = 1;
     let mutable_alias = unsafe { ::unbounded::reference(&mut source) };
@@ -57,7 +62,7 @@ explicit reference where one is needed, such as as in the example below.
 
 ### Example
 
-```
+```rust
 #[you_can::turn_off_the_borrow_checker]
 fn main() {
     let mut source = Some(1);
@@ -85,7 +90,7 @@ fn main() {
 
 #### Expanded
 
-```
+```rust
 fn main() {
     let mut source = Some(1);
     let inner_mut = unsafe { ::unbounded::reference(&*source.as_ref().unwrap()) };
@@ -114,10 +119,6 @@ fn main() {
 }
 ```
 
-[OFF]: https://steveklabnik.com/writing/you-can-t-turn-off-the-borrow-checker-in-rust
-[REF]: https://doc.rust-lang.org/std/primitive.reference.html
-[UBL]: https://doc.rust-lang.org/nomicon/unbounded-lifetimes.html
-
 ## Discussions
 
 Here are some discussions about why this is an awful idea:
@@ -125,3 +126,7 @@ Here are some discussions about why this is an awful idea:
 - https://rust.reddit.com/s9az4y
 - https://internals.rust-lang.org/t/16001
 - https://news.ycombinator.com/item?id=30031323
+
+[OFF]: https://steveklabnik.com/writing/you-can-t-turn-off-the-borrow-checker-in-rust
+[REF]: https://doc.rust-lang.org/std/primitive.reference.html
+[UBL]: https://doc.rust-lang.org/nomicon/unbounded-lifetimes.html
