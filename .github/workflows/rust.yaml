@@ -4,7 +4,6 @@ jobs:
   rust:
     strategy:
       matrix:
-        rust_toolchain: ["stable", "nightly"]
         include:
         - rust_toolchain: stable
         - rust_toolchain: beta
