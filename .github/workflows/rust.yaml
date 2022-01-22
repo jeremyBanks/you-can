@@ -6,12 +6,13 @@ jobs:
       matrix:
         rust_toolchain: ["stable", "nightly"]
         include:
-        - rust_toolchain: stable
-          rust_bootstrap: ""
-        - rust_toolchain: stable
+        - n: 1
+          rust_toolchain: stable
+        - n: 2
+          rust_toolchain: stable
           rust_bootstrap: RUSTC_BOOTSTRAP=1
-        - rust_toolchain: nightly
-          rust_bootstrap: ""
+        - n: 3
+          rust_toolchain: nightly
       fail-fast: false
     runs-on: ubuntu-latest
     name: "${{ matrix.rust_toolchain }} ${{ matrix.rust_bootstrap }}"
