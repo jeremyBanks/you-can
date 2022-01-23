@@ -37,7 +37,7 @@ fn main() {
 
     let mut_1 = &mut owned[0];
     let mut_2 = &mut owned[1];
-    //~^ WARNING The borrow checker is suppressed for these references.
+    //~^ WARNING the borrow checker is suppressed for these references.
 
     drop(owned);
     let undefined = *mut_1 + *mut_2;

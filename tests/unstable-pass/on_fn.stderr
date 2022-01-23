@@ -1,10 +1,10 @@
-warning: This suppresses the borrow checker in an unsafe, unsound, and unstable way that produces undefined behaviour. This is not suitable for any purpose beyond educational experimentation.
+warning: this suppresses the borrow checker in an unsafe, unsound, and unstable way that produces undefined behaviour. this is not suitable for any purpose beyond educational experimentation.
  --> $DIR/on_fn.rs:1:1
   |
 1 | #[you_can::turn_off_the_borrow_checker]
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-warning: The borrow checker is suppressed for these references.
+warning: the borrow checker is suppressed for these references.
  --> $DIR/on_fn.rs:6:17
   |
 6 |     let mut_1 = &mut owned[0];

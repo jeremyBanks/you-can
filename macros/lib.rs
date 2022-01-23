@@ -41,8 +41,8 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
             proc_macro::Diagnostic::spanned(
                 vec![Span::call_site().parent().unwrap_or_else(Span::call_site)],
                 proc_macro::Level::Warning,
-                "This suppresses the borrow checker in an unsafe, unsound, and unstable way \
-                that produces undefined behaviour. This is not suitable for any purpose beyond \
+                "this suppresses the borrow checker in an unsafe, unsound, and unstable way \
+                that produces undefined behaviour. this is not suitable for any purpose beyond \
                 educational experimentation.",
             ).emit();
 
@@ -50,7 +50,7 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
                 proc_macro::Diagnostic::spanned(
                     suppressor.suppressed_references,
                     proc_macro::Level::Warning,
-                    "The borrow checker is suppressed for these references.",
+                    "the borrow checker is suppressed for these references.",
                 ).emit();
             }
         } else {
