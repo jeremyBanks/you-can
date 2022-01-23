@@ -13,4 +13,4 @@ version = "0.0.9"
 path = "./lib.rs"
 
 [dependencies]
-you-can = { path = "../", version = "^0.0.9"}
+you-can = { path = "../", version = "^0.0.10-dev"}
