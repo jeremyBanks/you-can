@@ -136,7 +136,7 @@ fn main() {
 
 Here are some discussions about why this is such an bad idea:
 
-- <https://rust.reddit.com/s9az4y>
+- <https://reddit.com/s9az4y>
 - <https://internals.rust-lang.org/t/16001>
 - <https://news.ycombinator.com/item?id=30031323>
 
