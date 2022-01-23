@@ -1,7 +1,6 @@
 #![cfg_attr(rustc_is_unstable, feature(proc_macro_diagnostic, proc_macro_span))]
 
 use {
-    crossterm::style::Stylize,
     proc_macro::{Span, TokenStream},
     quote::ToTokens,
     syn::{fold::Fold, parse_macro_input, parse_quote, spanned::Spanned, visit::Visit},
@@ -39,38 +38,37 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
 
     if_unstable! {
         then {
-            let diagnostic = proc_macro::Diagnostic::spanned(
+            proc_macro::Diagnostic::spanned(
                 vec![Span::call_site().parent().unwrap()],
                 proc_macro::Level::Warning,
                 "This suppresses the borrow checker in an unsafe, unsound, and unstable way \
                 that produces undefined behaviour. This is not suitable for any purpose beyond \
                 educational experimentation.",
-            );
+            ).emit();
 
             if suppressor.suppressed_references.len() > 1 {
-                diagnostic.span_warning(
+                proc_macro::Diagnostic::spanned(
                     suppressor.suppressed_references,
+                    proc_macro::Level::Warning,
                     "The borrow checker is suppressed for these references.",
-                )
-            } else {
-                diagnostic
-            }.emit();
+                ).emit();
+            }
         } else {
             static DANGER: std::sync::Once = std::sync::Once::new();
             DANGER.call_once(|| {
                 eprintln!();
                 eprintln!(
                     "{}  This project is using the the {}",
-                    " DANGER ".white().on_red().bold().slow_blink(),
-                    "#[you_can::turn_off_the_borrow_checker]".bold()
+                    " DANGER ",
+                    "#[you_can::turn_off_the_borrow_checker]"
                 );
                 eprintln!(
                     "{}  macro, which is inherently unsafe, unsound, and unstable. This is not",
-                    " DANGER ".red().on_black().bold().slow_blink()
+                    " DANGER "
                 );
                 eprintln!(
                     "{}  suitable for any purpose beyond educational experimentation.",
-                    " DANGER ".black().on_white().bold().slow_blink()
+                    " DANGER "
                 );
                 eprintln!();
             });

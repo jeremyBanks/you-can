@@ -1,5 +1,0 @@
-
-[48;5;9m[38;5;15m[1m[5m DANGER [0m  This project is using the the [1m#[you_can::turn_off_the_borrow_checker][0m
-[48;5;0m[38;5;9m[1m[5m DANGER [0m  macro, which is inherently unsafe, unsound, and unstable. This is not
-[48;5;15m[38;5;0m[1m[5m DANGER [0m  suitable for any purpose beyond educational experimentation.
-

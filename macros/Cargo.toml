@@ -13,7 +13,6 @@ proc-macro = true
 path = "./lib.rs"
 
 [dependencies]
-crossterm = "0.22.1"
 quote = "1.0.14"
 syn = { version = "1.0.85", features = ["default", "full", "visit", "visit-mut", "extra-traits", "fold"] }
 
