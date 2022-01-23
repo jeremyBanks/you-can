@@ -15,6 +15,10 @@ version = "0.0.6-dev"
 unbounded = { path = "./unbounded", version = "^0.0.6-dev"}
 you-can-build-macros = { path = "./macros", version = "^0.0.6-dev"}
 
+[dev-dependencies]
+compiletest_rs = "0.7.1"
+rustc_version = "0.4.0"
+
 [workspace.metadata.release]
 allow-branch = ["trunk", "main", "master"]
 consolidate-commits = true

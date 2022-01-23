@@ -7,18 +7,17 @@ jobs:
         include:
         - rust_toolchain: stable
         - rust_toolchain: beta
+          caption: with RUSTC_BOOTSTRAP=1
           rust_bootstrap: RUSTC_BOOTSTRAP=1
         - rust_toolchain: nightly
       fail-fast: false
     runs-on: ubuntu-latest
-    name: "${{ matrix.rust_bootstrap }} ${{ matrix.rust_toolchain }}"
+    name: ${{ matrix.rust_toolchain }} ${{ matrix.caption }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
-            toolchain: ${{ matrix.rust_toolchain }}
+          toolchain: ${{ matrix.rust_toolchain }}
       - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} build --all
-      - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} test --doc
+      - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} test --all
       - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} doc --all
-      - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} test --examples
-        if: matrix.rust_toolchain == 'nightly'

@@ -1,0 +1,8 @@
+warning: This suppresses the borrow checker in an unsafe, unsound, and unstable way that produces undefined behaviour. This is not suitable for any purpose beyond educational experimentation.
+ --> $DIR/on_fn_empty.rs:1:1
+  |
+1 | #[you_can::turn_off_the_borrow_checker]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: 1 warning emitted
+

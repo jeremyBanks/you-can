@@ -1,12 +1,15 @@
 fn main() {
     autocfg::rerun_env("RUSTC_BOOTSTRAP");
+    if rustc_is_unstable() {
+        println!("cargo:rustc-cfg=rustc_is_unstable");
+    }
+}
+
+fn rustc_is_unstable() -> bool {
     match rustc_version::version_meta().unwrap().channel {
         rustc_version::Channel::Nightly | rustc_version::Channel::Dev => {
-            autocfg::emit("rustc_is_unstable");
+            true
         },
-        _ if std::env::var("RUSTC_BOOTSTRAP").is_ok() => {
-            autocfg::emit("rustc_is_unstable");
-        },
-        _ => {},
+        _ => std::env::var("RUSTC_BOOTSTRAP").is_ok()
     }
 }
