@@ -11,7 +11,14 @@ fn ui() {
         }),
         bless: std::env::var_os("BLESS").is_some(),
         edition: Some("2021".into()),
-        target_rustcflags: Some(String::from("--extern you_can -L target/debug/deps")),
+        target_rustcflags: Some(
+            [
+                "--extern you_can",
+                "--extern unbounded",
+                "-L target/debug/deps",
+            ]
+            .join(" "),
+        ),
         ..Default::default()
     };
 

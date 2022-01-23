@@ -1,5 +1,5 @@
 warning: This suppresses the borrow checker in an unsafe, unsound, and unstable way that produces undefined behaviour. This is not suitable for any purpose beyond educational experimentation.
- --> $DIR/on_fn_empty.rs:4:1
+ --> $DIR/on_fn.rs:4:1
   |
 4 | #[you_can::turn_off_the_borrow_checker]
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

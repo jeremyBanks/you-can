@@ -48,7 +48,7 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
             );
 
             if suppressor.suppressed_references.len() > 1 {
-                diagnostic.span_note(
+                diagnostic.span_warning(
                     suppressor.suppressed_references,
                     "The borrow checker is suppressed for these references.",
                 )
