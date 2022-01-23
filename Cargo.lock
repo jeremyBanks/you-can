@@ -460,7 +460,7 @@ dependencies = [
 
 [[package]]
 name = "you-can-build-macros"
-version = "0.0.8"
+version = "0.0.9"
 dependencies = [
  "autocfg",
  "quote",
