@@ -3,7 +3,7 @@
 use {
     proc_macro::{Span, TokenStream},
     quote::ToTokens,
-    syn::{fold::Fold, parse_macro_input, parse_quote, spanned::Spanned, visit::Visit},
+    syn::{fold::Fold, parse_macro_input, parse_quote_spanned, spanned::Spanned, visit::Visit},
 };
 
 /// Runs one of two branches depending on whether we're running on a stable
@@ -39,7 +39,7 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
     if_unstable! {
         then {
             proc_macro::Diagnostic::spanned(
-                vec![Span::call_site().parent().unwrap()],
+                vec![Span::call_site().parent().expect("call site has no parent")],
                 proc_macro::Level::Warning,
                 "This suppresses the borrow checker in an unsafe, unsound, and unstable way \
                 that produces undefined behaviour. This is not suitable for any purpose beyond \
@@ -91,7 +91,7 @@ impl Fold for BorrowCheckerSuppressor {
             syn::Expr::Reference(node) => {
                 let node = syn::fold::fold_expr_reference(self, node);
                 self.suppressed_references.push(node.span().unwrap());
-                syn::Expr::Block(parse_quote! {
+                syn::Expr::Block(parse_quote_spanned! { node.span() =>
                     {
                         let r#ref = #node;
                         unsafe { ::unbounded::reference(r#ref) }
@@ -109,7 +109,7 @@ impl Fold for BorrowCheckerSuppressor {
             let refs = ref_collector.refs;
             self.suppressed_references.extend(ref_collector.spans);
             let then_stmts = node.then_branch.stmts.clone();
-            node.then_branch = parse_quote! {
+            node.then_branch = parse_quote_spanned! { node.span() =>
                 {
                     #(let #refs = unsafe { ::unbounded::reference(#refs) };)*
                     #(#then_stmts)*
@@ -125,7 +125,7 @@ impl Fold for BorrowCheckerSuppressor {
         let refs = ref_collector.refs;
         self.suppressed_references.extend(ref_collector.spans);
         let body = node.body.clone();
-        node.body = parse_quote! {
+        node.body = parse_quote_spanned! { node.span() =>
             {
                 #(let #refs = unsafe { ::unbounded::reference(#refs) };)*
                 #body
