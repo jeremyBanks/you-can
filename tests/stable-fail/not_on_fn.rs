@@ -1,8 +1,12 @@
 fn main() {
-    let mut source = 1;
-    let mutable_alias = &mut source;
-    source = 2;
-    //~^ ERROR cannot assign to `source` because it is borrowed
-    *mutable_alias = 3;
-    println!("{source}");
+    let mut owned = vec![1, 32];
+
+    // unsound mutable aliasing
+    let mut_1 = &mut owned[0];
+    let mut_2 = &mut owned[1]; //~ ERROR
+
+    // use after free
+    drop(owned); //~ ERROR
+    let undefined = *mut_1 + *mut_2;
+    println!("{undefined}");
 }

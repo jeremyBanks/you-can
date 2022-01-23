@@ -39,7 +39,7 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
     if_unstable! {
         then {
             proc_macro::Diagnostic::spanned(
-                vec![Span::call_site().parent().expect("call site has no parent")],
+                vec![Span::call_site().parent().unwrap_or_else(Span::call_site)],
                 proc_macro::Level::Warning,
                 "This suppresses the borrow checker in an unsafe, unsound, and unstable way \
                 that produces undefined behaviour. This is not suitable for any purpose beyond \

@@ -4,26 +4,16 @@ mod inner {
     #![you_can::turn_off_the_borrow_checker]
 
     pub fn main() {
-        let mut source = Some(1);
-        let inner_mut = &*source.as_ref().unwrap();
-        let mutable_alias = &mut source;
+        let mut owned = vec![1, 32];
 
-        source = None;
-        *mutable_alias = Some(2);
+        // unsound mutable aliasing
+        let mut_1 = &mut owned[0];
+        let mut_2 = &mut owned[1];
 
-        if let Some(ref mut inner_a) = source {
-            match source {
-                Some(ref mut inner_b) => {
-                    *inner_b = inner_mut + 1;
-                    *inner_a = inner_mut + 2;
-                },
-                None => {
-                    println!("none");
-                },
-            }
-        }
-
-        println!("{source:?}");
+        // use after free
+        drop(owned);
+        let undefined = *mut_1 + *mut_2;
+        println!("{undefined}");
     }
 }
 

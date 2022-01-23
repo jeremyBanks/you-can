@@ -5,12 +5,12 @@ warning: This suppresses the borrow checker in an unsafe, unsound, and unstable 
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 warning: The borrow checker is suppressed for these references.
- --> $DIR/on_fn.rs:4:25
+ --> $DIR/on_fn.rs:6:17
   |
-4 |     let mutable_alias = &mut source;
-  |                         ^^^^^^^^^^^
-5 |     let immutable_alias = &source;
-  |                           ^^^^^^^
+6 |     let mut_1 = &mut owned[0];
+  |                 ^^^^^^^^^^^^^
+7 |     let mut_2 = &mut owned[1];
+  |                 ^^^^^^^^^^^^^
 
 warning: 2 warnings emitted
 

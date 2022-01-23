@@ -15,11 +15,16 @@ to use**.
 
 ```compile_fail
 fn main() {
-   let mut source = 1;
-   let mutable_alias = &mut source;
-   source = 2;  // error: cannot assign to `source` because it is borrowed
-   *mutable_alias = 3;
-   println!("{source}");
+        let mut owned = vec![1, 32];
+
+        // unchecked mutable aliasing
+        let mut_1 = &mut owned[0];
+        let mut_2 = &mut owned[1];
+
+        // use after free
+        drop(owned);
+        let undefined = *mut_1 + *mut_2;
+        println!("{undefined}");
 }
 ```
 
@@ -28,11 +33,16 @@ fn main() {
 ```rust
 #[you_can::turn_off_the_borrow_checker]
 fn main() {
-    let mut source = 1;
-    let mutable_alias = &mut source;
-    source = 2;
-    *mutable_alias = 3;
-    println!("{source}");
+    let mut owned = vec![1, 32];
+
+    // unchecked mutable aliasing
+    let mut_1 = &mut owned[0];
+    let mut_2 = &mut owned[1];
+
+    // use after free
+    drop(owned);
+    let undefined = *mut_1 + *mut_2;
+    println!("{undefined}");
 }
 ```
 
@@ -47,11 +57,16 @@ the borrow checker to effectively ignore them.
 
 ```rust
 fn main() {
-    let mut source = 1;
-    let mutable_alias = unsafe { ::unbounded::reference(&mut source) };
-    source = 2;
-    *mutable_alias = 3;
-    println!("{source}");
+        let mut owned = vec![1, 32];
+
+        // unchecked mutable aliasing
+        let mut_1 = unsafe { ::unbounded::reference(&mut owned[0]) };
+        let mut_2 = unsafe { ::unbounded::reference(&mut owned[1]) };
+
+        // use after free
+        drop(owned);
+        let undefined = *mut_1 + *mut_2;
+        println!("{undefined}");
 }
 ```
 
