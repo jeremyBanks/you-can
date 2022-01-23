@@ -7,7 +7,7 @@ fn ui() {
         src_base: std::path::PathBuf::from(if rustc_is_unstable() { "tests/ui-unstable" } else { "tests/ui-stable" }),
         bless: std::env::var_os("BLESS").is_some(),
         target_rustcflags: Some(String::from(
-            "--edition=2021 --extern you_can -L target/debug -L target/debug/deps",
+            "--edition=2021 --extern you_can -L target/debug",
         )),
         ..Default::default()
     };
