@@ -1,12 +1,13 @@
 [package]
 authors = ["Jeremy Banks <_@jeremy.ca>"]
 description = "ಠ_ಠ"
+documentation = "https://docs.rs/you-can/latest/you_can/attr.turn_off_the_borrow_checker.html"
 edition = "2021"
-homepage = "https://docs.rs/you-can/latest/you_can/attr.turn_off_the_borrow_checker.html"
+homepage = "https://crates.io/crates/you-can"
 license = "MIT OR Apache-2.0"
 name = "you-can-build-macros"
 repository = "https://github.com/jeremyBanks/you-can"
-version = "0.0.7"
+version = "0.0.8-dev"
 
 [lib]
 proc-macro = true

@@ -49,8 +49,9 @@ fn main() {
 
 The macro looks for references created in the code by use of the `&` or `&mut`
 operators or the `ref` and `ref mut` bindings, and wraps them with our
-[`::unbounded::reference()`] function to [unbind their lifetimes][UBL], causing
-the borrow checker to effectively ignore them. If running on nightly, it adds new warning diagnostic messages for every reference it modifies.
+[`borrow_unchecked()`] function to [unbind their lifetimes][UBL], causing the
+borrow checker to effectively ignore them. If running on nightly, it adds new
+warning diagnostic messages for every reference it modifies.
 
 #### Expanded
 
@@ -58,8 +59,8 @@ the borrow checker to effectively ignore them. If running on nightly, it adds ne
 fn main() {
     let mut owned = vec![1, 32];
 
-    let mut_1 = unsafe { ::unbounded::reference(&mut owned[0]) };
-    let mut_2 = unsafe { ::unbounded::reference(&mut owned[1]) };
+    let mut_1 = unsafe { ::you_can::borrow_unchecked(&mut owned[0]) };
+    let mut_2 = unsafe { ::you_can::borrow_unchecked(&mut owned[1]) };
 
     drop(owned);
     let undefined = *mut_1 + *mut_2;
@@ -105,18 +106,18 @@ fn main() {
 ```rust
 fn main() {
     let mut source = Some(1);
-    let inner_mut = unsafe { ::unbounded::reference(&*source.as_ref().unwrap()) };
-    let mutable_alias = unsafe { ::unbounded::reference(&mut source) };
+    let inner_mut = unsafe { ::you_can::borrow_unchecked(&*source.as_ref().unwrap()) };
+    let mutable_alias = unsafe { ::you_can::borrow_unchecked(&mut source) };
 
     source = None;
     *mutable_alias = Some(2);
 
     if let Some(ref mut inner_a) = source {
-        let inner_a = unsafe { ::unbounded::reference(inner_a) };
+        let inner_a = unsafe { ::you_can::borrow_unchecked(inner_a) };
 
         match source {
             Some(ref mut inner_b) => {
-                let inner_b = unsafe { ::unbounded::reference(inner_b) };
+                let inner_b = unsafe { ::you_can::borrow_unchecked(inner_b) };
 
                 *inner_b = inner_mut + 1;
                 *inner_a = inner_mut + 2;
@@ -133,7 +134,7 @@ fn main() {
 
 ## Discussions
 
-Here are some discussions about why this is an awful idea:
+Here are some discussions about why this is such an bad idea:
 
 - <https://rust.reddit.com/s9az4y>
 - <https://internals.rust-lang.org/t/16001>

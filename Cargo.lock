@@ -404,7 +404,10 @@ dependencies = [
 
 [[package]]
 name = "unbounded"
-version = "0.0.7"
+version = "0.0.8-dev"
+dependencies = [
+ "you-can",
+]
 
 [[package]]
 name = "unicode-width"
@@ -452,13 +455,12 @@ version = "0.0.8-dev"
 dependencies = [
  "compiletest_rs",
  "rustc_version 0.4.0",
- "unbounded",
  "you-can-build-macros",
 ]
 
 [[package]]
 name = "you-can-build-macros"
-version = "0.0.7"
+version = "0.0.8-dev"
 dependencies = [
  "autocfg",
  "quote",

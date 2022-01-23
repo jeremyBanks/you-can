@@ -77,7 +77,7 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
 }
 
 /// Replaces all references (&T or &mut T) with unbounded references by wrapping
-/// them in calls to unbounded::reference().
+/// them in calls to you_can::borrow_unchecked().
 #[derive(Debug, Default)]
 struct BorrowCheckerSuppressor {
     suppressed_references: Vec<Span>,
@@ -92,7 +92,7 @@ impl Fold for BorrowCheckerSuppressor {
                 syn::Expr::Block(parse_quote_spanned! { node.span() =>
                     {
                         let r#ref = #node;
-                        unsafe { ::unbounded::reference(r#ref) }
+                        unsafe { ::you_can::borrow_unchecked(r#ref) }
                     }
                 })
             },
@@ -109,7 +109,7 @@ impl Fold for BorrowCheckerSuppressor {
             let then_stmts = node.then_branch.stmts.clone();
             node.then_branch = parse_quote_spanned! { node.span() =>
                 {
-                    #(let #refs = unsafe { ::unbounded::reference(#refs) };)*
+                    #(let #refs = unsafe { ::you_can::borrow_unchecked(#refs) };)*
                     #(#then_stmts)*
                 }
             };
@@ -125,7 +125,7 @@ impl Fold for BorrowCheckerSuppressor {
         let body = node.body.clone();
         node.body = parse_quote_spanned! { node.span() =>
             {
-                #(let #refs = unsafe { ::unbounded::reference(#refs) };)*
+                #(let #refs = unsafe { ::you_can::borrow_unchecked(#refs) };)*
                 #body
             }
         };
