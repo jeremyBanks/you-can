@@ -1,0 +1,5 @@
+
+ DANGER   This project is using the the #[you_can::turn_off_the_borrow_checker]
+ DANGER   macro, which is inherently unsafe, unsound, and unstable. This is not
+ DANGER   suitable for any purpose beyond educational experimentation.
+

@@ -1,0 +1,25 @@
+on: [push, workflow_dispatch, pull_request]
+name: rust
+jobs:
+  rust:
+    strategy:
+      matrix:
+        include:
+        - rust_toolchain: stable
+          name: stable
+          tests: --tests
+        - rust_toolchain: nightly
+          name: unstable nightly
+          tests: --all
+      fail-fast: false
+    runs-on: ubuntu-latest
+    name: ${{ matrix.name }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust_toolchain }}
+      - run: cargo +${{ matrix.rust_toolchain }} build --all
+      - run: cargo +${{ matrix.rust_toolchain }} clean
+      - run: cargo +${{ matrix.rust_toolchain }} test ${{ matrix.tests }}
+      - run: cargo +${{ matrix.rust_toolchain }} doc --all
