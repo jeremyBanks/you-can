@@ -7,14 +7,14 @@ jobs:
         include:
         - rust_toolchain: stable
           name: stable
-          test: --tests
+          tests: --tests
         - rust_toolchain: beta
-          name: unstable beta with RUSTC_BOOTSTRAP=1
+          name: unstable beta
           rust_bootstrap: RUSTC_BOOTSTRAP=1
-          test: --all
+          tests: --all
         - rust_toolchain: nightly
           name: unstable nightly
-          test: --all
+          tests: --all
       fail-fast: false
     runs-on: ubuntu-latest
     name: ${{ matrix.name }}
@@ -24,5 +24,6 @@ jobs:
         with:
           toolchain: ${{ matrix.rust_toolchain }}
       - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} build --all
+      - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} clean
       - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} test ${{ matrix.tests }}
       - run: ${{ matrix.rust_bootstrap }} cargo +${{ matrix.rust_toolchain }} doc --all
