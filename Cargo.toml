@@ -13,7 +13,7 @@ version = "0.0.7-dev"
 
 [dependencies]
 unbounded = { path = "./unbounded", version = "^0.0.7"}
-you-can-build-macros = { path = "./macros", version = "^0.0.6-dev.1"}
+you-can-build-macros = { path = "./macros", version = "^0.0.7"}
 
 [dev-dependencies]
 compiletest_rs = { version = "0.7.1", features=["tmp"] }
