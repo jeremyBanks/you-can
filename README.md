@@ -15,16 +15,16 @@ to use**.
 
 ```compile_fail
 fn main() {
-        let mut owned = vec![1, 32];
+    let mut owned = vec![1, 32];
 
-        // unchecked mutable aliasing
-        let mut_1 = &mut owned[0];
-        let mut_2 = &mut owned[1];
+    let mut_1 = &mut owned[0];
+    let mut_2 = &mut owned[1];
+    //~^ ERROR cannot borrow `owned` as mutable more than once at a time
 
-        // use after free
-        drop(owned);
-        let undefined = *mut_1 + *mut_2;
-        println!("{undefined}");
+    drop(owned);
+    //~^ ERROR cannot move out of `owned` because it is borrowed
+    let undefined = *mut_1 + *mut_2;
+    println!("{undefined}");
 }
 ```
 
@@ -35,11 +35,10 @@ fn main() {
 fn main() {
     let mut owned = vec![1, 32];
 
-    // unchecked mutable aliasing
     let mut_1 = &mut owned[0];
     let mut_2 = &mut owned[1];
+    //~^ WARNING The borrow checker is suppressed for these references.
 
-    // use after free
     drop(owned);
     let undefined = *mut_1 + *mut_2;
     println!("{undefined}");
@@ -51,22 +50,20 @@ fn main() {
 The macro looks for references created in the code by use of the `&` or `&mut`
 operators or the `ref` and `ref mut` bindings, and wraps them with our
 [`::unbounded::reference()`] function to [unbind their lifetimes][UBL], causing
-the borrow checker to effectively ignore them.
+the borrow checker to effectively ignore them. If running on nightly, it adds new warning diagnostic messages for every reference it modifies.
 
 #### Expanded
 
 ```rust
 fn main() {
-        let mut owned = vec![1, 32];
+    let mut owned = vec![1, 32];
 
-        // unchecked mutable aliasing
-        let mut_1 = unsafe { ::unbounded::reference(&mut owned[0]) };
-        let mut_2 = unsafe { ::unbounded::reference(&mut owned[1]) };
+    let mut_1 = unsafe { ::unbounded::reference(&mut owned[0]) };
+    let mut_2 = unsafe { ::unbounded::reference(&mut owned[1]) };
 
-        // use after free
-        drop(owned);
-        let undefined = *mut_1 + *mut_2;
-        println!("{undefined}");
+    drop(owned);
+    let undefined = *mut_1 + *mut_2;
+    println!("{undefined}");
 }
 ```
 
