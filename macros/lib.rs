@@ -2,8 +2,8 @@
 
 use {
     proc_macro::{Span, TokenStream},
-    quote::ToTokens,
-    syn::{fold::Fold, parse_macro_input, parse_quote_spanned, spanned::Spanned, visit::Visit},
+    quote::{quote, ToTokens},
+    syn::{fold::Fold, parse_quote_spanned, spanned::Spanned, visit::Visit},
 };
 
 /// Runs one of two branches depending on whether we're running on a stable
@@ -29,12 +29,20 @@ macro_rules! if_unstable {
 
 #[proc_macro_attribute]
 pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) -> TokenStream {
-    let input: syn::File = parse_macro_input!(input);
-
     let mut suppressor = BorrowCheckerSuppressor {
         suppressed_references: vec![],
     };
-    let output = suppressor.fold_file(input);
+
+    let output = if let Ok(as_file) = syn::parse(input.clone()) {
+        suppressor.fold_file(as_file).to_token_stream()
+    } else if let Ok(as_expr) = syn::parse(input.clone()) {
+        suppressor.fold_expr(as_expr).to_token_stream()
+    } else if let Ok(as_stmt) = syn::parse(input) {
+        suppressor.fold_stmt(as_stmt).to_token_stream()
+    } else {
+        return quote! { compile_error!("unsupported use of #[turn_off_the_borrow_checker]") }
+            .into();
+    };
 
     if_unstable! {
         then {
@@ -57,19 +65,9 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
             static DANGER: std::sync::Once = std::sync::Once::new();
             DANGER.call_once(|| {
                 eprintln!();
-                eprintln!(
-                    "{}  This project is using the the {}",
-                    " DANGER ",
-                    "#[you_can::turn_off_the_borrow_checker]"
-                );
-                eprintln!(
-                    "{}  macro, which is inherently unsafe, unsound, and unstable. This is not",
-                    " DANGER "
-                );
-                eprintln!(
-                    "{}  suitable for any purpose beyond educational experimentation.",
-                    " DANGER "
-                );
+                eprintln!(" DANGER   This project is using the the #[you_can::turn_off_the_borrow_checker]");
+                eprintln!(" DANGER   macro, which is inherently unsafe, unsound, and unstable. This is not");
+                eprintln!(" DANGER   suitable for any purpose beyond educational experimentation.");
                 eprintln!();
             });
         }
