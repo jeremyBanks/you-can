@@ -12,7 +12,7 @@ repository = "https://github.com/jeremyBanks/you-can"
 version = "0.0.7-dev"
 
 [dependencies]
-unbounded = { path = "./unbounded", version = "^0.0.6-dev.1"}
+unbounded = { path = "./unbounded", version = "^0.0.7"}
 you-can-build-macros = { path = "./macros", version = "^0.0.6-dev.1"}
 
 [dev-dependencies]
