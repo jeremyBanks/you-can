@@ -1,5 +1,5 @@
-#[you_can::turn_off_the_borrow_checker]
 mod inner {
+    #![you_can::turn_off_the_borrow_checker]
     pub fn main() {
         let mut source = Some(1);
         let inner_mut = &*source.as_ref().unwrap();
