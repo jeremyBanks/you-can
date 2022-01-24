@@ -12,7 +12,7 @@ repository = "https://github.com/jeremyBanks/you-can"
 version = "0.0.10-dev"
 
 [dependencies]
-you-can-build-macros = { path = "./macros", version = "0.0.9"}
+you-can-build-macros = { path = "./macros", version = "0.0.10"}
 
 [dev-dependencies]
 compiletest_rs = { version = "0.7.1", features=["tmp"] }
