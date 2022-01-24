@@ -403,6 +403,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "unbounded"
+version = "0.0.13"
+dependencies = [
+ "you-can 0.0.13",
+]
+
+[[package]]
 name = "unicode-width"
 version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -444,16 +451,37 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "you-can"
+version = "0.0.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7ab7f971cbb6a8b1b1c6bd3ccf185cc1a3d10e9f4018b856912f1dce8a6eb09e"
+dependencies = [
+ "you-can-build-macros 0.0.13 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "you-can"
 version = "0.0.14-dev"
 dependencies = [
  "compiletest_rs",
  "rustc_version 0.4.0",
- "you-can-build-macros",
+ "you-can-build-macros 0.0.13",
 ]
 
 [[package]]
 name = "you-can-build-macros"
 version = "0.0.13"
+dependencies = [
+ "autocfg",
+ "quote",
+ "rustc_version 0.2.3",
+ "syn",
+]
+
+[[package]]
+name = "you-can-build-macros"
+version = "0.0.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d2f1a56c6e0316dd591578dc12fbad8dab3dc25224f172b513fd6b8a98acc3a8"
 dependencies = [
  "autocfg",
  "quote",
