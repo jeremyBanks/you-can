@@ -1,13 +1,12 @@
 [package]
 authors = ["Jeremy Banks <_@jeremy.ca>"]
-description = "ಠ_ಠ"
-documentation = "https://docs.rs/you-can/latest/you_can/attr.turn_off_the_borrow_checker.html"
+description = "#[you_can::turn_off_the_borrow_checker]"
+documentation = "https://docs.rs/you-can"
 edition = "2021"
-homepage = "https://crates.io/crates/you-can"
 license = "MIT OR Apache-2.0"
 name = "you-can-build-macros"
 repository = "https://github.com/jeremyBanks/you-can"
-version = "0.0.13"
+version = "0.0.14-dev"
 
 [lib]
 proc-macro = true
@@ -15,8 +14,7 @@ path = "./lib.rs"
 
 [dependencies]
 quote = "1.0.14"
-syn = { version = "1.0.85", features = ["default", "full", "visit", "visit-mut", "extra-traits", "fold"] }
+syn = { version = "1.0.85", features = ["full", "visit", "fold"] }
 
 [build-dependencies]
-autocfg = "1.0.1"
 rustc_version = "0.2"

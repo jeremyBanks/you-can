@@ -1,18 +1,17 @@
 [workspace]
-members = [".", "macros", "unbounded"]
+members = [".", "macros"]
 
 [package]
 authors = ["Jeremy Banks <_@jeremy.ca>"]
 description = "#[you_can::turn_off_the_borrow_checker]"
 edition = "2021"
-homepage = "https://docs.rs/you-can/latest/you_can/attr.turn_off_the_borrow_checker.html"
 license = "MIT OR Apache-2.0"
 name = "you-can"
 repository = "https://github.com/jeremyBanks/you-can"
 version = "0.0.14-dev"
 
 [dependencies]
-you-can-build-macros = { path = "./macros", version = "0.0.13"}
+you-can-build-macros = { path = "./macros", version = "0.0.14-dev"}
 
 [dev-dependencies]
 compiletest_rs = { version = "0.7.1", features=["tmp"] }

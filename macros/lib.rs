@@ -1,3 +1,4 @@
+//! internal proc macros for [`::you_can`]
 #![cfg_attr(rustc_is_unstable, feature(proc_macro_diagnostic, proc_macro_span))]
 
 use {

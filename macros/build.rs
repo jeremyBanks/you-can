@@ -1,5 +1,5 @@
 fn main() {
-    autocfg::rerun_env("RUSTC_BOOTSTRAP");
+    println!("cargo:rerun-if-env-changed=RUSTC_BOOTSTRAP");
     if rustc_is_unstable() {
         println!("cargo:rustc-cfg=rustc_is_unstable");
     }
