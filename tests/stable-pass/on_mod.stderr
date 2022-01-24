@@ -3,3 +3,24 @@
  DANGER   macro, which is inherently unsafe, unsound, and unstable. This is not
  DANGER   suitable for any purpose beyond educational experimentation.
 
+warning: usage of an `unsafe` block
+ --> $DIR/on_mod.rs:7:21
+  |
+7 |         let mut_1 = &mut owned[0];
+  |                     ^
+  |
+note: the lint level is defined here
+ --> $DIR/on_mod.rs:1:1
+  |
+1 | #[you_can::turn_off_the_borrow_checker]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  = note: this warning originates in the attribute macro `you_can::turn_off_the_borrow_checker` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: usage of an `unsafe` block
+ --> $DIR/on_mod.rs:8:21
+  |
+8 |         let mut_2 = &mut owned[1];
+  |                     ^
+
+warning: 2 warnings emitted
+

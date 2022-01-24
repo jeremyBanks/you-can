@@ -1,5 +1,4 @@
 #![feature(stmt_expr_attributes, proc_macro_hygiene)]
-#![warn(unsafe_code)]
 
 pub fn main() {
     let mut owned = vec![1, 32];

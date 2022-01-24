@@ -2,7 +2,7 @@
 
 use {
     proc_macro::{Span, TokenStream},
-    quote::{quote, ToTokens},
+    quote::{quote, quote_spanned, ToTokens},
     syn::{fold::Fold, parse_quote_spanned, spanned::Spanned, visit::Visit},
 };
 
@@ -11,18 +11,19 @@ use {
 /// dev, or anywhere that `RUSTC_BOOTSTRAP=1`).
 macro_rules! if_unstable {
     { then { $($then:tt)* } else { $($else:tt)* } } => {
+        #[allow(unreachable_code)]
         if cfg!(rustc_is_unstable) {
+            #[cfg(not(rustc_is_unstable))] {
+                unreachable!();
+            }
             #[cfg(rustc_is_unstable)] {
                 $($then)*
             }
-            #[cfg(not(rustc_is_unstable))] {
-                unreachable!()
-            }
         } else {
-            $($else)*
             #[cfg(rustc_is_unstable)] {
-                unreachable!()
+                unreachable!();
             }
+            $($else)*
         }
     }
 }
@@ -61,6 +62,8 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
                     "the borrow checker is suppressed for these references.",
                 ).emit();
             }
+
+            output.into_token_stream().into()
         } else {
             static DANGER: std::sync::Once = std::sync::Once::new();
             DANGER.call_once(|| {
@@ -71,12 +74,13 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
                 eprintln!();
             });
 
-            // TODO: add a #[warn(unsafe_code)] annotation on the function in lieu
-            // of more precise warnings we can add on nightly.
+            quote_spanned! {
+                Span::call_site().into() =>
+                #[warn(unsafe_code)]
+                #output
+            }.into_token_stream().into()
         }
-    };
-
-    output.into_token_stream().into()
+    }
 }
 
 /// Replaces all references (&T or &mut T) with unbounded references by wrapping

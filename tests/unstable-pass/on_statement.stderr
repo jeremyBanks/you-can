@@ -1,32 +1,14 @@
 warning: this suppresses the borrow checker in an unsafe, unsound, and unstable way that produces undefined behaviour. this is not suitable for any purpose beyond educational experimentation.
- --> $DIR/on_statement.rs:7:5
+ --> $DIR/on_statement.rs:6:5
   |
-7 |     #[you_can::turn_off_the_borrow_checker]
+6 |     #[you_can::turn_off_the_borrow_checker]
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 warning: this suppresses the borrow checker in an unsafe, unsound, and unstable way that produces undefined behaviour. this is not suitable for any purpose beyond educational experimentation.
- --> $DIR/on_statement.rs:9:5
+ --> $DIR/on_statement.rs:8:5
   |
-9 |     #[you_can::turn_off_the_borrow_checker]
+8 |     #[you_can::turn_off_the_borrow_checker]
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-warning: usage of an `unsafe` block
- --> $DIR/on_statement.rs:8:17
-  |
-8 |     let mut_1 = &mut owned[0];
-  |                 ^^^^^^^^^^^^^
-  |
-note: the lint level is defined here
- --> $DIR/on_statement.rs:2:9
-  |
-2 | #![warn(unsafe_code)]
-  |         ^^^^^^^^^^^
-
-warning: usage of an `unsafe` block
-  --> $DIR/on_statement.rs:10:17
-   |
-10 |     let mut_2 = &mut owned[1];
-   |                 ^^^^^^^^^^^^^
-
-warning: 4 warnings emitted
+warning: 2 warnings emitted
 

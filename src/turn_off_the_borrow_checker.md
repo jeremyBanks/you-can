@@ -2,11 +2,11 @@
 to. [Rust's references][REF] aren't pointers, and the compiler is free to
 decimate code that tries to use references as though they are. If you need raw
 pointer behaviour in Rust, don't use this, use
-[Rust's actual raw pointers][PTR], which don't make the same aliasing
-guarauntees to the compiler. However, if you would like to pretend the borrow
-checker doesn't exist **for educational purposes and never in production code**,
-this macro that will suppress many (though not all) borrow checker errors in the
-code it's applied to.
+[Rust's actual raw pointers][PTR], which don't make the same aliasing guarantees
+to the compiler. However, if you would like to pretend the borrow checker
+doesn't exist **for educational purposes and never in production code**, this
+macro that will suppress many (though not all) borrow checker errors in the code
+it's applied to.
 
 This shouldn't break any otherwise-valid code; the borrow checker doesn't affect
 compilation output, only verify input validity. However, it will allow unsound

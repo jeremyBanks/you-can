@@ -4,21 +4,22 @@
  DANGER   suitable for any purpose beyond educational experimentation.
 
 warning: usage of an `unsafe` block
- --> $DIR/on_fn.rs:8:17
+ --> $DIR/on_fn.rs:7:17
   |
-8 |     let mut_1 = &mut owned[0];
+7 |     let mut_1 = &mut owned[0];
   |                 ^
   |
 note: the lint level is defined here
- --> $DIR/on_fn.rs:1:9
+ --> $DIR/on_fn.rs:2:1
   |
-1 | #![warn(unsafe_code)]
-  |         ^^^^^^^^^^^
+2 | #[you_can::turn_off_the_borrow_checker]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  = note: this warning originates in the attribute macro `you_can::turn_off_the_borrow_checker` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 warning: usage of an `unsafe` block
- --> $DIR/on_fn.rs:9:17
+ --> $DIR/on_fn.rs:8:17
   |
-9 |     let mut_2 = &mut owned[1];
+8 |     let mut_2 = &mut owned[1];
   |                 ^
 
 warning: 2 warnings emitted
