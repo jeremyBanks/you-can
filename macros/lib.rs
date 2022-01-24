@@ -70,6 +70,9 @@ pub fn turn_off_the_borrow_checker(_attribute: TokenStream, input: TokenStream) 
                 eprintln!(" DANGER   suitable for any purpose beyond educational experimentation.");
                 eprintln!();
             });
+
+            // TODO: add a #[warn(unsafe_code)] annotation on the function in lieu
+            // of more precise warnings we can add on nightly.
         }
     };
 
