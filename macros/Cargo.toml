@@ -7,7 +7,7 @@ homepage = "https://crates.io/crates/you-can"
 license = "MIT OR Apache-2.0"
 name = "you-can-build-macros"
 repository = "https://github.com/jeremyBanks/you-can"
-version = "0.0.11"
+version = "0.0.13"
 
 [lib]
 proc-macro = true
