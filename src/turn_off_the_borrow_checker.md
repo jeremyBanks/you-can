@@ -144,6 +144,7 @@ Here are some related discussions, mostly about why you shouldn't do this:
 - <https://internals.rust-lang.org/t/16001>
 - <https://news.ycombinator.com/item?id=30031323>
 - <https://twitter.com/pcwalton/status/1485718602233704452>
+- <https://smitop.com/post/rust-skip-borrowck>
 
 [OFF]: https://steveklabnik.com/writing/you-can-t-turn-off-the-borrow-checker-in-rust
 [PTR]: https://doc.rust-lang.org/std/primitive.pointer.html
