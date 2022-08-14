@@ -8,10 +8,10 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 name = "you-can"
 repository = "https://github.com/jeremyBanks/you-can"
-version = "0.0.14-dev"
+version = "0.0.14"
 
 [dependencies]
-you-can-build-macros = { path = "./macros", version = "0.0.14-dev"}
+you-can-build-macros = { path = "./macros", version = "0.0.14"}
 
 [dev-dependencies]
 compiletest_rs = { version = "0.8.0", features=["tmp"] }

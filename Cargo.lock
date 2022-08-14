@@ -502,7 +502,7 @@ checksum = "c811ca4a8c853ef420abd8592ba53ddbbac90410fab6903b3e79972a631f7680"
 
 [[package]]
 name = "you-can"
-version = "0.0.14-dev"
+version = "0.0.14"
 dependencies = [
  "compiletest_rs",
  "rustc_version 0.4.0",
@@ -511,7 +511,7 @@ dependencies = [
 
 [[package]]
 name = "you-can-build-macros"
-version = "0.0.14-dev"
+version = "0.0.14"
 dependencies = [
  "quote",
  "rustc_version 0.2.3",
