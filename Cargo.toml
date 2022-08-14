@@ -14,7 +14,7 @@ version = "0.0.14-dev"
 you-can-build-macros = { path = "./macros", version = "0.0.14-dev"}
 
 [dev-dependencies]
-compiletest_rs = { version = "0.7.1", features=["tmp"] }
+compiletest_rs = { version = "0.8.0", features=["tmp"] }
 rustc_version = "0.4.0"
 
 [workspace.metadata.release]
