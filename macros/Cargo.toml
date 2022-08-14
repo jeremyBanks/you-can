@@ -9,7 +9,6 @@ repository = "https://github.com/jeremyBanks/you-can"
 version = "0.0.14"
 
 [lib]
-doc = false
 proc-macro = true
 path = "./lib.rs"
 
